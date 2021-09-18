@@ -1,0 +1,39 @@
+plugins {
+    id('com.github.johnrengelman.shadow') version '7.0.0'
+    id('io.micronaut.application') version '2.0.4'
+}
+
+version = '0.1'
+group = 'micronaut.pf4j.poc'
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime('undertow')
+    testRuntime('junit5')
+    processing {
+        incremental(true)
+        annotations('micronaut.pf4j.poc.*')
+    }
+}
+
+dependencies {
+    annotationProcessor('io.micronaut:micronaut-http-validation')
+    implementation('io.micronaut:micronaut-http-client')
+    implementation('io.micronaut:micronaut-runtime')
+    implementation('io.micronaut:micronaut-validation')
+    implementation("org.pf4j:pf4j:${pf4jVersion}")
+    implementation("org.pf4j:pf4j-update:${pf4jUpdateVersion}")
+    runtimeOnly('ch.qos.logback:logback-classic')
+}
+
+application {
+    mainClass.set('micronaut.pf4j.poc.Application')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
