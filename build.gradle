@@ -1,3 +1,5 @@
+import java.time.OffsetDateTime
+
 plugins {
     id('com.github.johnrengelman.shadow') version '7.0.0'
     id('io.micronaut.application') version '2.0.4'
@@ -26,6 +28,7 @@ dependencies {
     implementation('io.micronaut:micronaut-validation')
     implementation("org.pf4j:pf4j:${pf4jVersion}")
     implementation("org.pf4j:pf4j-update:${pf4jUpdateVersion}")
+    implementation(project(':plugin-i'))
     runtimeOnly('ch.qos.logback:logback-classic')
 }
 
@@ -36,4 +39,15 @@ application {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+jar.manifest {
+    attributes(
+            'Built-By': System.properties['user.name'],
+            'Build-Timestamp': OffsetDateTime.now(),
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vm.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+            'Implementation-Version': project.version
+    )
 }

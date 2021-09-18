@@ -1,1 +1,4 @@
 rootProject.name = 'micronaut-pf4j-poc'
+include 'plugin-i'
+include 'plugins:dummyImpl'
+include 'plugins:fooImpl'

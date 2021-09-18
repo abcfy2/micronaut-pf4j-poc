@@ -1,0 +1,36 @@
+import java.time.OffsetDateTime
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly project(':plugin-i')
+    compileOnly "org.pf4j:pf4j:${pf4jVersion}"
+    annotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
+}
+
+jar.manifest {
+    attributes(
+            'Built-By': System.properties['user.name'],
+            'Build-Timestamp': OffsetDateTime.now(),
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vm.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+            'Implementation-Version': project.version,
+            'Plugin-Class': project.pluginClass,
+            'Plugin-Id': project.pluginId,
+            'Plugin-Version': project.version,
+            'Plugin-Description': project.hasProperty('pluginDescription') ? project.pluginDescription : ''
+    )
+}
+
+shadowJar {
+    archiveClassifier.set('')
+}
