@@ -11,7 +11,7 @@ public class PluginUpdateJob {
     @Inject
     PluginService pluginService;
 
-    @Scheduled(fixedDelay = "10s")
+    @Scheduled(fixedDelay = "10s", initialDelay = "3s")
     void executeEveryTen() {
         pluginService.updatePlugins();
     }

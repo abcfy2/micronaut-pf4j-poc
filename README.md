@@ -38,9 +38,36 @@ $ java -jar micronaut-pf4j-poc-0.1-all.jar
 Open another terminal:
 
 ```sh
-$ curl -s localhost:8080/plugin1
-{"response":"Response from DummyImpl","plugin":"DummyPlugin"}
+$ curl -s "localhost:8080?plugin=plugin1"
+{"response":"Response from DummyImpl, provided by plugin: 'PluginDescriptor [pluginId=DummyPluginImpl1, pluginClass=micronaut.pf4j.poc.plugin.impl.DummyPlugin, version=0.0.1, provider=null, dependencies=[], description=This is my first dummy plugin, requires=*, license=null]'","plugin":"DummyPlugin"}
 
-$ curl -s localhost:8080/plugin2
-{"response":"Response from FooImpl","plugin":"FooPlugin"}
+$ curl -s "localhost:8080?plugin=plugin2"
+{"response":"Response from FooImpl, provided by plugin: 'PluginDescriptor [pluginId=FooPluginImpl1, pluginClass=micronaut.pf4j.poc.plugin.impl.FooPlugin, version=0.0.1, provider=null, dependencies=[], description=This is my first foo plugin, requires=*, license=null]'","plugin":"FooPlugin"}
+```
+
+## Online update
+
+Follow the steps like [abcfy2/pf4j-poc#online-update](https://github.com/abcfy2/pf4j-poc#online-update), create `updates/`, `repositories.json` and `plugins.json`. And the running output should be like this:
+
+```txt
+# ...
+12:55:34.903 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 774ms. Server Running: http://[0:0:0:0:0:0:0:0]:8080
+12:56:07.715 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'DummyPluginImpl1@0.0.1'
+12:56:07.715 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Unload plugin 'DummyPluginImpl1@0.0.1'
+12:56:07.720 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Plugin 'DummyPluginImpl1@0.0.2' resolved
+12:56:07.720 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Start plugin 'DummyPluginImpl1@0.0.2'
+12:56:07.722 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'FooPluginImpl1@0.0.1'
+12:56:07.722 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Unload plugin 'FooPluginImpl1@0.0.1'
+12:56:07.726 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Plugin 'FooPluginImpl1@0.0.2' resolved
+12:56:07.726 [scheduled-executor-thread-1] INFO  org.pf4j.AbstractPluginManager - Start plugin 'FooPluginImpl1@0.0.2'
+```
+
+New response should be like this:
+
+```sh
+$ curl -s "localhost:8080?plugin=plugin1"
+{"response":"Response from DummyImpl, provided by plugin: 'PluginDescriptor [pluginId=DummyPluginImpl1, pluginClass=micronaut.pf4j.poc.plugin.impl.DummyPlugin, version=0.0.2, provider=null, dependencies=[], description=This is my first dummy plugin, requires=*, license=null]'","plugin":"DummyPlugin"}
+
+$ curl -s "localhost:8080?plugin=plugin2"
+{"response":"Response from FooImpl, provided by plugin: 'PluginDescriptor [pluginId=FooPluginImpl1, pluginClass=micronaut.pf4j.poc.plugin.impl.FooPlugin, version=0.0.2, provider=null, dependencies=[], description=This is my first foo plugin, requires=*, license=null]'","plugin":"FooPlugin"}
 ```

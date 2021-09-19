@@ -9,4 +9,9 @@ public class DummyPlugin extends Plugin {
         super(wrapper);
     }
 
+    @Override
+    public void start() {
+        DummyImpl.descriptor = getWrapper().getDescriptor();
+    }
+
 }

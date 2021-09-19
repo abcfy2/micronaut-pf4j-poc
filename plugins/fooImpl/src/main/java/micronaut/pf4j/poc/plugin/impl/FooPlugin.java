@@ -9,4 +9,9 @@ public class FooPlugin extends Plugin {
         super(wrapper);
     }
 
+    @Override
+    public void start() {
+        FooImpl.descriptor = getWrapper().getDescriptor();
+    }
+
 }
